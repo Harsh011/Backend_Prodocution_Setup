@@ -1,0 +1,11 @@
+{
+  "name": "backend_prodocution_setup",
+  "version": "1.0.0",
+  "description": "Backend Application setup",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Harshal Shastrakar",
+  "license": "ISC"
+}
