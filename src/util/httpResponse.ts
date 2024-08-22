@@ -1,7 +1,10 @@
+ 
+ 
 import { Request, Response } from 'express'
 import { httpResponse } from '../Types/types'
 import config from '../config/config'
 import { EApplicationEnviroment } from '../constant/application'
+import logger from './logger'
 
 export default (req: Request, res: Response, responseStatusCode: number, responseMessage: string, data: unknown = null): void => {
     const response: httpResponse = {
@@ -17,8 +20,8 @@ export default (req: Request, res: Response, responseStatusCode: number, respons
     }
 
     //log
-    // eslint-disable-next-line no-console
-    console.info('CONTROLLER RESPONSE', { meta: response })
+
+    logger.info('CONTROLLER RESPONSE', { meta: response })
 
     //produnction env check
     if (config.ENV === EApplicationEnviroment.PORDUCTION) {

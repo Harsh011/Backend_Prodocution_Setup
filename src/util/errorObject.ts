@@ -1,9 +1,11 @@
+ 
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import { Request } from 'express'
 import { httpError } from '../Types/types'
 import responseMessage from '../constant/responseMessage'
 import config from '../config/config'
 import { EApplicationEnviroment } from '../constant/application'
+import logger from './logger'
 
 export default (err: Error | unknown, req: Request, errorStatusCode: number = 500): httpError => {
     const errorObj: httpError = {
@@ -21,8 +23,7 @@ export default (err: Error | unknown, req: Request, errorStatusCode: number = 50
 
     //log
 
-    // eslint-disable-next-line no-console
-    console.info('CONTROLLER ERROR', { meta: errorObj })
+    logger.error('CONTROLLER ERROR', { meta: errorObj })
 
     //Production env check
 
