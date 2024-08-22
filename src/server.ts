@@ -1,11 +1,19 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import app from './app'
 import config from './config/config'
+import databseService from './service/databseService'
 import logger from './util/logger'
 
 const server = app.listen(config.PORT)
-;(() => {
+;(async () => {
     try {
         //database logic
+        const connection = await databseService.connect()
+        logger.info('DB CONNECTED', {
+            meta: {
+                CONNETION_NAME: connection.name
+            }
+        })
 
         logger.info('APPLICATION STARTED', {
             meta: {

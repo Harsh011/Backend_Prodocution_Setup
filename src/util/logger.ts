@@ -6,24 +6,41 @@ import { ConsoleTransportInstance, FileTransportInstance } from 'winston/lib/win
 import config from '../config/config'
 import { EApplicationEnviroment } from '../constant/application'
 import path from 'path'
+import * as sourceMapSupport from 'source-map-support'
+import { blue, green, red, yellow, magenta } from 'colorette'
+
+//linking trace support
+sourceMapSupport.install()
+
+const colorizelevel = (level: string) => {
+    switch (level) {
+        case 'ERROR':
+            return red(level)
+        case 'WARN':
+            return yellow(level)
+        case 'INFO':
+            return blue(level)
+        default:
+            return level
+    }
+}
 
 const consoleLogFormat = format.printf((info) => {
     const { level, message, timestamp, meta = {} } = info
 
-    const customLevel = level.toUpperCase()
+    const customLevel = colorizelevel(level.toUpperCase())
 
-     
-    const customTimeStamp = timestamp
+    const customTimeStamp = green(timestamp as string)
 
-     
     const customMessage = message
 
     const customMeta = util.inspect(meta, {
         showHidden: false,
-        depth: null
+        depth: null,
+        colors: true
     })
 
-    const customLog = `${customLevel} [${customTimeStamp}] ${customMessage}\n${'META'} ${customMeta}\n`
+    const customLog = `${customLevel} [${customTimeStamp}] ${customMessage}\n${magenta('META')} ${customMeta}\n`
 
     return customLog
 })
