@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { createLogger, format, transports } from 'winston'
+import 'winston-mongodb'
 import util from 'util'
 import { ConsoleTransportInstance, FileTransportInstance } from 'winston/lib/winston/transports'
 import config from '../config/config'
@@ -8,6 +10,7 @@ import { EApplicationEnviroment } from '../constant/application'
 import path from 'path'
 import * as sourceMapSupport from 'source-map-support'
 import { blue, green, red, yellow, magenta } from 'colorette'
+import { MongoDBTransportInstance } from 'winston-mongodb'
 
 //linking trace support
 sourceMapSupport.install()
@@ -92,10 +95,22 @@ const fileTransport = (): Array<FileTransportInstance> => {
         })
     ]
 }
+const mongoDBTransport = (): Array<MongoDBTransportInstance> => {
+    return [
+        new transports.MongoDB({
+            level: 'info',
+            db: config.DATABASE_URL as string,
+            metaKey: 'meta',
+            expireAfterSeconds: 3000 * 24 * 30,
+            options: { useUnifiedTopology: true },
+            collection: 'application-logs'
+        })
+    ]
+}
 
 export default createLogger({
     defaultMeta: {
         meta: {}
     },
-    transports: [...fileTransport(), ...consoleTransport()]
+    transports: [...fileTransport(), ...mongoDBTransport(), ...consoleTransport()]
 })
