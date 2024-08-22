@@ -4,9 +4,21 @@ import router from './router/apiRouter'
 import httpError from './util/httpError'
 import responseMessage from './constant/responseMessage'
 import globalErrorHandler from './middleware/globalErrorHandler'
+import helmet from 'helmet'
+import cors from 'cors'
 
 const app: Application = express()
+//helmet
 
+app.use(helmet())
+//cors
+app.use(
+    cors({
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+        origin: '*',
+        credentials: true
+    })
+)
 //middlewear
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../', 'public')))

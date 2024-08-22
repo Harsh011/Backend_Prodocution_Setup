@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import app from './app'
 import config from './config/config'
+import { initRateLimiter } from './config/rate-limter'
 import databseService from './service/databseService'
 import logger from './util/logger'
 
@@ -14,6 +15,9 @@ const server = app.listen(config.PORT)
                 CONNETION_NAME: connection.name
             }
         })
+
+        initRateLimiter(connection)
+        logger.info('RATE LIMITER INITIALIZED')
 
         logger.info('APPLICATION STARTED', {
             meta: {
